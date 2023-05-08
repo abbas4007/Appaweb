@@ -92,17 +92,20 @@ class UserLoginView(View):
 
 class UserRegisterApiView(APIView):
     def post(self, request):
+        print("***")
+
         ser_data = UserRegisterSerializer(data=request.POST)
         if ser_data.is_valid():
             ser_data.create(ser_data.validated_data)
             return Response(ser_data.data, status=status.HTTP_201_CREATED)
+
         return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserLoginApiView(View):
     def post(self,request):
         ser_data = UserLoginSerializer(data=request.POST)
         if ser_data.is_valid():
-            user = authenticate(request, phone_number=ser_data.validated_data['phone'], password=ser_data.validated_data['password'])
+            user = authenticate(request, phone_number=ser_data.validated_data['phone_number'], password=ser_data.validated_data['password'])
             if user is not None:
                 login(request, user)
                 messages.success(request, 'you logged in successfully', 'info')

@@ -15,11 +15,11 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 		del validated_data['password2']
 		return User.objects.create_user(**validated_data)
 
-	@staticmethod
-	def validate_full_name(value):
-		if value == 'admin':
-			raise serializers.ValidationError('username cant be `admin`')
-		return value
+
+	# def validate_full_name(value):
+	# 	if value == 'admin':
+	# 		raise serializers.ValidationError('username cant be `admin`')
+	# 	return value
 
 	def validate(self, data):
 		if data['password'] != data['password2']:
@@ -34,7 +34,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserLoginSerializer(serializers.ModelSerializer):
-	password2 = serializers.CharField(write_only=True, required=True)
+	# password2 = serializers.CharField(write_only=True, required=True)
 
 	class Meta:
 		model = User
