@@ -108,10 +108,13 @@ class UserLoginApiView(View):
             user = authenticate(request, phone_number=ser_data.validated_data['phone_number'], password=ser_data.validated_data['password'])
             if user is not None:
                 login(request, user)
-                messages.success(request, 'you logged in successfully', 'info')
                 return Response(ser_data.data, status=status.HTTP_200_OK)
             return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# class UserLogoutApiView(View):
+#     def get(self, request) :
+#         logout(request)
+#         return Response(status = status.HTTP_200_OK)
 
 
 
