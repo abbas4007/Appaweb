@@ -111,10 +111,10 @@ class UserLoginApiView(View):
                 return Response(ser_data.data, status=status.HTTP_200_OK)
             return Response(ser_data.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# class UserLogoutApiView(View):
-#     def get(self, request) :
-#         logout(request)
-#         return Response(status = status.HTTP_200_OK)
+class UserLogoutApiView(View):
+    def get(self, request) :
+        logout(request)
+        return Response(status = status.HTTP_200_OK)
 
 
 
