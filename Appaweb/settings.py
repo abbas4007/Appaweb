@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+from django.core.files.storage import storages
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,6 +44,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'home',
     'order',
+    'storages',
+    'ckeditor',
 
 ]
 
@@ -60,8 +64,7 @@ ROOT_URLCONF = 'Appaweb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'orders.context_processors.cart',
             ],
         },
     },
@@ -159,7 +163,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_ACCESS_KEY_ID = '175f7486-0e78-414e-a39b-c3b1db5da2ba'
 AWS_SECRET_ACCESS_KEY = 'ddf547ea878dcee314705414a352f5fb64f3d787'
-AWS_S3_ENDPOINT_URL = 's3.ir-thr-at1.arvanstorage.ir'
+AWS_S3_ENDPOINT_URL = 'https://s3.ir-thr-at1.arvanstorage.com'
 AWS_STORAGE_BUCKET_NAME = 'django-shop-center'
 AWS_SERVICE_NAME = 's3'
 AWS_S3_FILE_OVERWRITE = False

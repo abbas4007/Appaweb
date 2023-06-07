@@ -14,11 +14,18 @@ from django.core.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from .serializers import OrderSerializer,CartAddSerialzer
+from .serializers import OrderSerializer,CartAddSerialzer,CartSerializer
 class CartView(View):
 	def get(self, request):
 		cart = Cart(request)
 		return render(request, 'orders/cart.html', {'cart':cart})
+
+
+class CartApiView(APIView):
+	def get(self, request):
+		cart = Cart(request)
+		cart_ser=CartSerializer(cart,many =True)
+		return Response(cart_ser,status=status.HTTP_200_OK)
 class CartApiView(APIView):
 	def get(self, request):
 		order = Order.objects.all()
@@ -43,12 +50,12 @@ class CartAddApiView(PermissionRequiredMixin, View):
 	def post(self, request, product_id):
 		cart = Cart(request)
 		product = get_object_or_404(Product, id=product_id)
-		cart_add = CartAddSerialzer(request.POST)
-		if cart_add.is_valid():
-			cart.add( product, cart_add.data['quantity'])
-		order = Order.objects.all()
-		order_ser = OrderSerializer(order, many = True)
-		return Response(order_ser,status = status.HTTP_200_OK)
+		add_ser = CartAddSerialzer(request.POST)
+		if add_ser.is_valid():
+			cart.add(product, add_ser.data['quantity'])
+			cart_ser=CartSerializer(cart)
+
+		return Response( cart_ser ,status=status.HTTP_201_CREATED)
 class CartRemoveView(View):
 	def get(self, request, product_id):
 		cart = Cart(request)
@@ -61,9 +68,8 @@ class CartRemoveApiView(View):
 		cart = Cart(request)
 		product = get_object_or_404(Product, id=product_id)
 		cart.remove(product)
-		order = Order.objects.all()
-		order_ser = OrderSerializer(order, many = True)
-		return Response(order_ser, status = status.HTTP_200_OK)
+		# cart_ser=CartSerializer(cart)
+		return Response(status=status.HTTP_200_OK)
 
 class OrderDetailView(LoginRequiredMixin, View):
 	form_class = CouponApplyForm
@@ -89,6 +95,14 @@ class OrderCreateView(LoginRequiredMixin, View):
 		cart.clear()
 		return redirect('orders:order_detail', order.id)
 
+class OrderCreateApiView(LoginRequiredMixin, View):
+	def get(self, request):
+		cart = Cart(request)
+		order = Order.objects.create(user=request.user)
+		for item in cart:
+			OrderItem.objects.create(order=order, product=item['product'], price=item['price'], quantity=item['quantity'])
+		cart.clear()
+		return Response(status=status.HTTP_201_CREATED)
 
 MERCHANT = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 ZP_API_REQUEST = "https://api.zarinpal.com/pg/v4/payment/request.json"
