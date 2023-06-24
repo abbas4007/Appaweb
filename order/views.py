@@ -14,7 +14,7 @@ from django.core.exceptions import PermissionDenied
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from .serializers import OrderSerializer,CartAddSerialzer,CartSerializer
+from .serializers import OrderSerializer,CartAddSerialzer,CartSerializer,CouponApplySerialzer
 class CartView(View):
 	def get(self, request):
 		cart = Cart(request)
@@ -25,12 +25,7 @@ class CartApiView(APIView):
 	def get(self, request):
 		cart = Cart(request)
 		cart_ser=CartSerializer(cart,many =True)
-		return Response(cart_ser,status=status.HTTP_200_OK)
-class CartApiView(APIView):
-	def get(self, request):
-		order = Order.objects.all()
-		order_ser = OrderSerializer(order,many = True)
-		return Response(order_ser, status = status.HTTP_200_OK)
+		return Response(cart_ser.data,status=status.HTTP_200_OK)
 
 
 class CartAddView(PermissionRequiredMixin, View):
@@ -44,8 +39,8 @@ class CartAddView(PermissionRequiredMixin, View):
 			cart.add(product, form.cleaned_data['quantity'])
 		return redirect('orders:cart')
 
-class CartAddApiView(PermissionRequiredMixin, View):
-	permission_required = 'orders.add_order'
+class CartAddApiView(APIView):
+	# permission_required = 'orders.add_order'
 
 	def post(self, request, product_id):
 		cart = Cart(request)
@@ -55,7 +50,7 @@ class CartAddApiView(PermissionRequiredMixin, View):
 			cart.add(product, add_ser.data['quantity'])
 			cart_ser=CartSerializer(cart)
 
-		return Response( cart_ser ,status=status.HTTP_201_CREATED)
+		return Response(cart_ser.data ,status=status.HTTP_201_CREATED)
 class CartRemoveView(View):
 	def get(self, request, product_id):
 		cart = Cart(request)
@@ -95,7 +90,7 @@ class OrderCreateView(LoginRequiredMixin, View):
 		cart.clear()
 		return redirect('orders:order_detail', order.id)
 
-class OrderCreateApiView(LoginRequiredMixin, View):
+class OrderCreateApiView(LoginRequiredMixin,APIView):
 	def get(self, request):
 		cart = Cart(request)
 		order = Order.objects.create(user=request.user)
@@ -135,6 +130,30 @@ class OrderPayView(LoginRequiredMixin, View):
 			e_code = req.json()['errors']['code']
 			e_message = req.json()['errors']['message']
 			return HttpResponse(f"Error code: {e_code}, Error Message: {e_message}")
+class OrderPayApiView(APIView):
+	def get(self, request, order_id):
+		order = Order.objects.get(id=order_id)
+		request.session['order_pay'] = {
+			'order_id': order.id,
+		}
+		req_data = {
+			"merchant_id": MERCHANT,
+			"amount": order.get_total_price(),
+			"callback_url": CallbackURL,
+			"description": description,
+			"metadata": {"mobile": request.user.phone_number, "email": request.user.email}
+		}
+		req_header = {"accept": "application/json",
+					  "content-type": "application/json'"}
+		req = requests.post(url=ZP_API_REQUEST, data=json.dumps(
+			req_data), headers=req_header)
+		authority = req.json()['data']['authority']
+		if len(req.json()['errors']) == 0:
+			return Response(ZP_API_STARTPAY.format(authority=authority))
+		else:
+			e_code = req.json()['errors']['code']
+			e_message = req.json()['errors']['message']
+			return Response(f"Error code: {e_code}, Error Message: {e_message}")
 
 
 class OrderVerifyView(LoginRequiredMixin, View):
@@ -193,3 +212,20 @@ class CouponApplyView(LoginRequiredMixin, View):
 			order.discount = coupon.discount
 			order.save()
 		return redirect('orders:order_detail', order_id)
+
+class CouponApplyApiView(APIView):
+	def post(self, request, order_id):
+		now = datetime.datetime.now()
+		ser = CouponApplySerialzer(request.POST)
+		if ser.is_valid():
+			code = ser.data['code']
+			try:
+				coupon = Coupon.objects.get(code__exact=code, valid_from__lte=now, valid_to__gte=now, active=True)
+			except Coupon.DoesNotExist:
+				messages.error(request, 'this coupon does not exists', 'danger')
+				return redirect('orders:order_detail', order_id)
+			order = Order.objects.get(id=order_id)
+			order.discount = coupon.discount
+			order.save()
+			order_ser = OrderSerializer(order,many =True)
+		return Response(order_ser.data)

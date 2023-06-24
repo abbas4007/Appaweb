@@ -95,7 +95,9 @@ class UserRegisterApiView(APIView):
         print("***")
 
         ser_data = UserRegisterSerializer(data=request.POST)
+        print("***")
         if ser_data.is_valid():
+            print("***")
             ser_data.create(ser_data.validated_data)
             return Response(ser_data.data, status=status.HTTP_201_CREATED)
 
