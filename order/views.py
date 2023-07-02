@@ -15,6 +15,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from .serializers import OrderSerializer,CartAddSerialzer,CartSerializer,CouponApplySerialzer
+import json
 class CartView(View):
 	def get(self, request):
 		cart = Cart(request)
@@ -24,7 +25,9 @@ class CartView(View):
 class CartApiView(APIView):
 	def get(self, request):
 		cart = Cart(request)
-		cart_ser=CartSerializer(cart,many =True)
+		json.dumps(cart)
+		cart_ser=CartSerializer(cart,many =False)
+		json.dumps(cart_ser)
 		return Response(cart_ser.data,status=status.HTTP_200_OK)
 
 
@@ -90,14 +93,49 @@ class OrderCreateView(LoginRequiredMixin, View):
 		cart.clear()
 		return redirect('orders:order_detail', order.id)
 
-class OrderCreateApiView(LoginRequiredMixin,APIView):
-	def get(self, request):
-		cart = Cart(request)
-		order = Order.objects.create(user=request.user)
-		for item in cart:
-			OrderItem.objects.create(order=order, product=item['product'], price=item['price'], quantity=item['quantity'])
-		cart.clear()
-		return Response(status=status.HTTP_201_CREATED)
+class OrderCreateApiView(APIView):
+	def post(self, request):
+		user = request.user
+		data = request.data
+
+		order_items = data['orderItems']
+
+		if order_items and len(order_items) == 0 :
+			return Response({'error' : 'No Order Items. Please add atleast one product'},
+							status = status.HTTP_400_BAD_REQUEST)
+
+		else :
+
+			# Create order
+
+			total_amount = sum(item['price'] * item['quantity'] for item in order_items)
+
+			order = Order.objects.create(
+				user = user,
+				street = data['street'],
+				city = data['city'],
+				state = data['state'],
+				zip_code = data['zip_code'],
+				phone_no = data['phone_no'],
+				country = data['country'],
+				total_amount = total_amount
+			)
+
+			# Create order items and set order to order items
+			for i in order_items :
+				product = Product.objects.get(id = i['product'])
+
+				item = OrderItem.objects.create(
+					product = product,
+					order = order,
+					name = product.name,
+					quantity = i['quantity'],
+					price = i['price']
+				)
+
+				# Update product stock
+				product.stock -= item.quantity
+				product.save()
 
 MERCHANT = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 ZP_API_REQUEST = "https://api.zarinpal.com/pg/v4/payment/request.json"
