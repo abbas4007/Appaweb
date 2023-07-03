@@ -6,6 +6,10 @@ body{
     font-family: Sahel !important;
 
 }
-.myfont{
-    font-family: Sahel;
+.myfont, .focus-input100::after{
+    font-family: Sahel !important;
+}
+.btn-show-pass{
+    right: initial;
+    left: 0;
 }
