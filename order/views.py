@@ -97,9 +97,7 @@ class OrderCreateApiView(APIView):
 	def post(self, request):
 		user = request.user
 		data = request.data
-
 		order_items = data['orderItems']
-
 		if order_items and len(order_items) == 0 :
 			return Response({'error' : 'No Order Items. Please add atleast one product'},
 							status = status.HTTP_400_BAD_REQUEST)

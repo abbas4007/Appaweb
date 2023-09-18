@@ -1,12 +1,12 @@
 from django.urls import path
-from .views import UserLogoutView,UserRegisterApiView,UserRegisterVerifyCodeView,UserLoginApiView,UserLoginView,UserRegisterView
+from .views import UserLogoutView,UserRegisterVerifyCodeView,UserLoginView,UserRegisterView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 app_name = 'accounts'
 urlpatterns = [
 	path('register/', UserRegisterView.as_view(), name='user_register'),
-	path('registerapi/', UserRegisterApiView.as_view(), name='user_registerapi'),
-	path('loginapi/', UserLoginApiView.as_view(), name='user_loginapi'),
+	# path('registerapi/', UserRegisterApiView.as_view(), name='user_registerapi'),
+	# path('loginapi/', UserLoginApiView.as_view(), name='user_loginapi'),
 	path('verify/', UserRegisterVerifyCodeView.as_view(), name='verify_code'),
 	path('login/', UserLoginView.as_view(), name='user_login'),
 	path('logout/', UserLogoutView.as_view(), name='user_logout'),

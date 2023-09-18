@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
-
-
+{% load widget_tweaks %}
 {% block extra_headers %}
-	<title>Login V2</title>
+
+	<title>ورود به سایت</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->
-	<link rel="icon" type="image/png" href="{% static 'accounts/images/icons/favicon.ico"' %}/>
+	<link rel="icon" type="image/png" href="{% static 'accounts/images/icons/favicon.ico' %}">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/bootstrap/css/bootstrap.min.css' %}">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{% static 'accounts/fonts/font-awesome-4.7.0/css/font-awesome.min.css'%}">
+	<link rel="stylesheet" type="text/css" href="{% static 'accounts/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{% static 'accounts/fonts/iconic/css/material-design-iconic-font.min.css' %}">
 <!--===============================================================================================-->
@@ -28,32 +28,55 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/util.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/main.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'accounts/css/rtl.css' %}">
+<!--===============================================================================================-->
 {% endblock %}
-
-	{% block content %}
+{% block content %}
 	<div class="limiter">
+		{% if form.non_field_errors %}
+			<div class="myerrors">
+				{{form.non_field_errors.as_text}}
+			</div>
+		{% endif %}
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form">
+				<form class="login100-form validate-form" method="post">
+                    {% csrf_token %}
 					<span class="login100-form-title p-b-26 myfont">
-ورود به سایت
-                    </span>
+						ورود به سایت
+					</span>
 					<span class="login100-form-title p-b-48">
 						<i class="zmdi zmdi-font"></i>
 					</span>
 
-					<div class="wrap-input100 validate-input myfont" data-validate = "Valid email is: a@b.c">
-						<input class="input100" type="text" name="email">
-						<span class="focus-input100 myfont" data-placeholder="ایمیل"></span>
-					</div>
-
-					<div class="wrap-input100 validate-input myfont" data-validate="Enter password">
+					<div class="wrap-input100 validate-input" data-validate="Enter password">
 						<span class="btn-show-pass">
 							<i class="zmdi zmdi-eye"></i>
 						</span>
-						<input class="input100" type="password" name="pass">
-						<span class="focus-input100 myfont " data-placeholder="رمز ورود"></span>
+						{{form.phone|add_class:"input100"}}
+						<span class="focus-input100" data-placeholder="نام کاربری"></span>
+						{% if form.password.errors %}
+							<div class="myerrors">
+								{{form.password.errors}}
+							</div>
+						{% endif %}
 					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Enter password">
+						<span class="btn-show-pass">
+							<i class="zmdi zmdi-eye"></i>
+						</span>
+						{{form.password|add_class:"input100"}}
+						<span class="focus-input100" data-placeholder="گذرواژه"></span>
+						{% if form.password.errors %}
+							<div class="myerrors">
+								{{form.password.errors}}
+							</div>
+						{% endif %}
+					</div>
+
+{#					<a class="myfont" href="{% url 'password_reset' %}">فراموشی گذرواژه</a>#}
+					<br>
+{#					<a class="myfont" href="{% url 'register' %}">ثبت نام کنید</a>#}
 
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
@@ -63,16 +86,6 @@
 							</button>
 						</div>
 					</div>
-
-{#					<div class="text-center p-t-115">#}
-{#						<span class="txt1">#}
-{#							Don’t have an account?#}
-{#						</span>#}
-{##}
-{#						<a class="txt2" href="#">#}
-{#							Sign Up#}
-{#						</a>#}
-{#					</div>#}
 				</form>
 			</div>
 		</div>
@@ -86,8 +99,8 @@
 <!--===============================================================================================-->
 	<script src="{% static 'accounts/vendor/animsition/js/animsition.min.js' %}"></script>
 <!--===============================================================================================-->
-	<script src="{% static 'accounts/vendor/bootstrap/js/popper.js'%}" ></script>
-	<script src="{% static 'accounts/vendor/bootstrap/js/bootstrap.min.js'%}"></script>
+	<script src="{% static 'accounts/vendor/bootstrap/js/popper.js' %}"></script>
+	<script src="{% static 'accounts/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
 <!--===============================================================================================-->
 	<script src="{% static 'accounts/vendor/select2/select2.min.js' %}"></script>
 <!--===============================================================================================-->
@@ -96,6 +109,6 @@
 <!--===============================================================================================-->
 	<script src="{% static 'accounts/vendor/countdowntime/countdowntime.js' %}"></script>
 <!--===============================================================================================-->
-	<script src="{% static 'accounts/js/main.js'%}"></script>
+	<script src="{% static 'accounts/js/main.js' %}"></script>
 
 {% endblock %}

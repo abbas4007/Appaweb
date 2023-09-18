@@ -34,6 +34,7 @@ class ProductDetailView(View):
 		product = get_object_or_404(Product, slug=slug)
 		form = CartAddForm()
 		return render(request, 'home/detail.html', {'product':product, 'form':form})
+
 class BucketHomeApi(IsAdminUserMixin, View):
 	template_name = 'home/bucket.html'
 
@@ -58,6 +59,7 @@ class DeleteBucketObjectApi(APIView):
 	def get(self, request, key):
 		tasks.delete_object_task.delay(key)
 		return Response(request, status.HTTP_200_OK)
+
 class DownloadBucketObject(IsAdminUserMixin, View):
 	def get(self, request, key):
 		tasks.download_object_task.delay(key)
