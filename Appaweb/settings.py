@@ -34,6 +34,8 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'admin_interface',
+    'colorfield',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,7 +52,10 @@ INSTALLED_APPS = [
     'bootstrap5',
     'widget_tweaks',
 
+
 ]
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SILENCED_SYSTEM_CHECKS = ['security.W019']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -132,7 +137,6 @@ USE_TZ = True
 
 
 
-STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -183,3 +187,11 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'full',
     },
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'abi.esmaeili@gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_PASSWORD = 'gfxwvcetfibuyqqo'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Appaweb site'

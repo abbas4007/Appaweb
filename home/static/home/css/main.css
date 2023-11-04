@@ -23,7 +23,15 @@
   --color-primary: #008374;
   --color-secondary: #f85a40;
 }
-
+.services .services-box {
+    box-shadow: 0 0 10px 0 rgba(62, 28, 131, 0.07);
+    border-radius: 10px;
+    margin: 30px 0;
+    padding: 40px;
+    text-align: center;
+    background-color: #ffffff;
+    transition: all 0.4s ease;
+}
 /* Smooth scroll behavior */
 :root {
   scroll-behavior: smooth;

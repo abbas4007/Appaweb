@@ -9,15 +9,20 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import BucketHomeSerializer
 from order.forms import CartAddForm
+from .forms import PostSearchForm
 
 class HomeView(View):
+	form_class = PostSearchForm
 	def get(self, request, category_slug=None) :
 		products = Product.objects.filter(available = True)
 		categories = Category.objects.filter(is_sub = False)
+		products = Product.objects.all()
+		if request.GET.get('search') :
+			products = products.filter(name__contains = request.GET['search'])
 		if category_slug :
 			category = Category.objects.get(slug = category_slug)
 			products = products.filter(category = category)
-		return render(request, 'home/home.html', {'products' : products, 'categories' : categories})
+		return render(request, 'home/index.html', {'products' : products, 'categories' : categories,'form':self.form_class})
 
 class BucketHome(APIView):
 	def get(self, request, category_slug=None) :
