@@ -38,7 +38,7 @@ class ProductDetailView(View):
 	def get(self, request, slug):
 		product = get_object_or_404(Product, slug=slug)
 		form = CartAddForm()
-		return render(request, 'home/detail.html', {'product':product, 'form':form})
+		return render(request, 'home/detail.html', {'product':product, 'form2':form})
 
 # class BucketHomeApi(IsAdminUserMixin, View):
 # 	template_name = 'home/bucket.html'

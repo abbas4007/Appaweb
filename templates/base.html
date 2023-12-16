@@ -1,13 +1,12 @@
 {% load static %}
 
 <!DOCTYPE html>
-{% block extra_headerss %}
-<html lang="en" dir="rtl">
-
-{% endblock %}
+{#{% block extra_headerss %}#}
+{#<html lang="en" dir="rtl">#}
+{##}
+{#{% endblock %}#}
 <head>
     <title>{% block title %}{% endblock %}</title>
-{% block extra_headers %}
  <link type="text/css" rel="stylesheet" href="{% static 'home/css/style.css' %}">  <!-- Favicons -->
     <link href="{% static 'home/assets/img/favicon.png' %}" rel="icon">
   <link href="{% static 'home/assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
@@ -104,7 +103,6 @@
         crossorigin="anonymous"></script>
 
     </head>
-{% endblock %}
 
 <body>
 
