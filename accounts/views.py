@@ -16,8 +16,8 @@ class UserRegisterView(View):
 	template_name = 'accounts/register2.html'
 
 	def get(self, request):
-		form2 = self.form_class
-		return render(request, self.template_name, {'form2':form2})
+		form = self.form_class
+		return render(request, self.template_name, {'form':form})
 
 	def post(self, request):
 		form = self.form_class(request.POST)

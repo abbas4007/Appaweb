@@ -70,9 +70,9 @@
           </li>
           {% if request.user.is_authenticated %}
 
-            <li style="display: none;"><a class="nav-link scrollto " href="{% url 'accounts:user_register' %} " ><span> ثبت نام  </span></a></li>
+            <li style="display: none;"><a class="nav-link scrollto " href="{% url 'accounts:user_register' %} " ><span> خوش آمدید{{ request.user.full_name }}  </span></a></li>
            {% else %}
-           <li><a class="nav-link scrollto" href="{% url 'accounts:user_register' %}"><span> ثبت نام  </span></a></li>
+           <li><a class="nav-link scrollto" href="{% url 'accounts:user_register' %}"><span> ثبت نام {{ request.user.full_name }} </span></a></li>
             {% endif %}
             <li class="nav-link scrollto">
                 <form action="" method="get" >
