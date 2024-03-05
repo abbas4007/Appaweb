@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from .models import Product, Category
+from .models import Product, Category, Lesson
 # from . import tasks
 from django.contrib import messages
 # from utils import IsAdminUserMixin
@@ -37,8 +37,9 @@ class BucketHome(APIView):
 class ProductDetailView(View):
 	def get(self, request, slug):
 		product = get_object_or_404(Product, slug=slug)
+		lesson = get_object_or_404(Lesson, slug=slug)
 		form = CartAddForm()
-		return render(request, 'home/detail.html', {'product':product, 'form2':form})
+		return render(request, 'home/detail.html', {'product':product, 'form2':form,'lesson':lesson})
 
 # class BucketHomeApi(IsAdminUserMixin, View):
 # 	template_name = 'home/bucket.html'

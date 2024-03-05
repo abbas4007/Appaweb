@@ -39,3 +39,19 @@ class Product(models.Model):
 
 	def get_absolute_url(self):
 		return reverse('home:product_detail', args=[self.slug,])
+
+class Lesson(models.Model):
+    slug = models.SlugField()
+    title = models.CharField(max_length=120)
+    course = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    video_url = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('courses:lesson-detail',
+                       kwargs={
+                           'course_slug': self.course.slug,
+                           'lesson_slug': self.slug
+                       })
