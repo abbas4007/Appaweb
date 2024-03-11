@@ -37,9 +37,9 @@ class BucketHome(APIView):
 class ProductDetailView(View):
 	def get(self, request, slug):
 		product = get_object_or_404(Product, slug=slug)
-		lesson = get_object_or_404(Lesson, slug=slug)
+		# lesson = get_object_or_404(Lesson, slug=slug)
 		form = CartAddForm()
-		return render(request, 'home/detail.html', {'product':product, 'form2':form,'lesson':lesson})
+		return render(request, 'home/detail.html', {'product':product, 'form2':form})
 
 # class BucketHomeApi(IsAdminUserMixin, View):
 # 	template_name = 'home/bucket.html'

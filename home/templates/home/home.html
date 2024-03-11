@@ -91,35 +91,34 @@
                 <h3>جدیدترین مقالات</h3>
             <div class="btn-desc"><a class="btn btn-outline-primary" href="/courses/">همه مقالات  </a></div>
         </div>
-   <section>
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
 
-                <div class="row">
-{% for product in products %}
-
-
-                    <div class="col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-4">
-                        <div class="card"><img class="card-img-top cart-img" ><img src="{{ product.image.url }}">
- <div class="card-body"><h2 class="index-course-slider"><a class="d-block" href="{{ product.get_absolute_url }}">{{ product.name }}</a></h2>
-                                <div class="card-details d-flex justify-content-between align-items-center">
-                                  <div class="custom-btn-course-status">  <i class="fa fa-check"></i>   </div><span> عباس اسماعیلی</span>
-                                </div>
-                            </div>
-                            <div class="card-footer d-flex justify-content-between align-items-center"><span><i class="fa fa-clock"></i> 2:29:32 </span>  <span> 300 هزارتومان </span>  </div>
-                        </div>
-                    </div>
+         <div class="row">
+             {% for product in products %}
 
 
-        {% endfor %}
+                 <div class="col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-4">
+                 <div class="card"><img class="card-img-top cart-img" ><img src="{{ product.image.url }}">
+                     <div class="card-body"><h2 class="index-course-slider"><a class="d-block" href="{{ product.get_absolute_url }}">{{ product.name }}</a></h2>
+                         <div class="card-body"><h2 class="index-course-slider">{{ product.video_file }}</h2>
+                             <div class="card-details d-flex justify-content-between align-items-center">
+                                 <div class="custom-btn-course-status">  <i class="fa fa-check"></i>   </div><span> عباس اسماعیلی</span>
+                             </div>
+                         </div>
+                         <div class="card-footer d-flex justify-content-between align-items-center"><span><i class="fa fa-clock"></i> 2:29:32 </span>  <span> 300 هزارتومان </span>  </div>
+                     </div>
+                 </div>
 
-                </div>
-                </div>
-     </section>
 
+             {% endfor %}
+
+             </div>
+         </div>
 
 
 
-    <!--Start Services Section-->
+
+         <!--Start Services Section-->
     <section class="services bg-light py-1 px-5">
         <!--Start Description-->
 

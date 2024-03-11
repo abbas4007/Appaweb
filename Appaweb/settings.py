@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'bootstrap5',
     'widget_tweaks',
-
+    'extensions',
 
 
 ]
@@ -102,6 +102,24 @@ DATABASES = {
     }
 }
 
+STATIC_ROOT = BASE_DIR / 'productionfiles'
+
+STATIC_URL = 'static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CKEDITOR_UPLOAD_PATH = 'uploads'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'extraPlugins': ','.join(
+            [
+                'codesnippet',
+            ]),
+        # 'codeSnippet_theme': 'monokai',
+    },
+}
+
 AUTH_USER_MODEL = 'accounts.User'
 
 # Password validation
@@ -126,10 +144,12 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'en-us'
+#
+# TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'fa-ir'
 
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Asia/Tehran'
 USE_I18N = True
 
 USE_TZ = True

@@ -1,24 +1,106 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-        <div class="navbar-nav">
-            <div class="navbar-brand" href="/"><img src="/static/img/appaweb.jpg" width="100px" height="50px" alt="appaweb logo"></div>
+{#<nav class="navbar navbar-expand-lg navbar-dark bg-primary">#}
+{#    <div class="container-fluid">#}
+{#        <div class="navbar-nav">#}
+{#            <div class="navbar-brand" href="/"><img src="/static/img/appaweb.jpg" width="100px" height="50px" alt="appaweb logo"></div>#}
+{##}
+{#            <a class="nav-link active" href="{% url 'home:home' %}">Home</a>#}
+{#            {% if request.user.is_authenticated %}#}
+{#            <a class="nav-link active" href="{% url 'accounts:user_logout' %}">Logout</a>#}
+{#            {% else %}#}
+{#            <a class="nav-link active" href="{% url 'accounts:user_register' %}">Register</a>#}
+{#            <a class="nav-link active" href="{% url 'accounts:user_login' %}">Login</a>#}
+{#            {% endif %}#}
+{#            {% if request.user.is_admin %}#}
+{#            <a class="nav-link active" href="{% url 'home:bucket' %}">Bucket</a>#}
+{#            {% endif %}#}
+{#            <a class="nav-link active" href="{% url 'orders:cart' %}">CART {{ cart|length }}</a>#}
+{#        </div>#}
+{#    </div>#}
+{# <form action="" method="get">#}
+{#        {{ form.as_p }}#}
+{#        <input type="submit" value="Search">#}
+{#    </form><br/><br/>#}
+{#</nav>#}
+  <header id="header" class="fixed-top ">
+  <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: #0b0b0b">
 
-            <a class="nav-link active" href="{% url 'home:home' %}">Home</a>
+    <div class="container d-flex align-items-center justify-content-between ">
+
+      <h1 class="logo"><a href="{% url 'home:home' %}">Appaweb</a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+      <nav id="navbar" class="navbar navbar-dark">
+        <ul>
+            <li><a class="nav-link scrollto active" href="#hero"><span>خانه</span></a></li>
+            <li><a class="nav-link scrollto" href="#about"><span>درباره ما</span></a></li>
             {% if request.user.is_authenticated %}
-            <a class="nav-link active" href="{% url 'accounts:user_logout' %}">Logout</a>
-            {% else %}
-            <a class="nav-link active" href="{% url 'accounts:user_register' %}">Register</a>
-            <a class="nav-link active" href="{% url 'accounts:user_login' %}">Login</a>
-            {% endif %}
-            {% if request.user.is_admin %}
-            <a class="nav-link active" href="{% url 'home:bucket' %}">Bucket</a>
-            {% endif %}
-            <a class="nav-link active" href="{% url 'orders:cart' %}">CART {{ cart|length }}</a>
-        </div>
+          <li><a class="nav-link scrollto" href="{% url 'accounts:user_logout' %}"><span>خروج</span> </a></li>
+          {% else %}
+          <li><a class="nav-link scrollto" href="{% url 'accounts:user_login' %}"><span>ورود</span> </a></li>
+          {% endif %}
+          <li class="dropdown"><a href="#"><span>دوره ها</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li class="dropdown"><a href="#"><span>پایتون</span> <i class="bi bi-chevron-right"></i></a>
+                {% for product in products %}
+
+                <ul>
+                  <li><a href="#">{{product.name}}</a></li>
+
+
+                </ul>
+                {% endfor %}
+
+              </li>
+
+ <li class="dropdown"><a href="#"><span>جاوا</span> <i class="bi bi-chevron-right"></i></a>
+  {% for product in products %}
+
+  <ul>
+                  <li><a href="#">{{product.name }}</a></li>
+                  <li><a href="#">پیشرفته</a></li>
+
+                </ul>
+                {% endfor %}
+              </li>
+              <li><a href="#"> اندروید </a></li>
+            </ul>
+          </li>
+{#          {% if request.user.is_authenticated %}#}
+{##}
+{#            <li style="display: none;"><a class="nav-link scrollto " href="{% url 'accounts:user_register' %} " ><span> خوش آمدید{{ request.user.full_name }}  </span></a></li>#}
+{#           {% else %}#}
+{#           <li><a class="nav-link scrollto" href="{% url 'accounts:user_register' %}"><span> ثبت نام {{ request.user.full_name }} </span></a></li>#}
+{#            {% endif %}#}
+            <li class="nav-link scrollto">
+                <form action="" method="get" >
+            {{ form }}
+            <input type="submit" value="Search">
+            </form>
+            </li>
+
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+    </div><!-- .navbar -->
     </div>
- <form action="" method="get">
-        {{ form.as_p }}
-        <input type="submit" value="Search">
-    </form><br/><br/>
-</nav>
+    </div>
+  </nav>
+  </header><!-- End Header -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <!-- JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+
+    </head>
 

@@ -30,6 +30,7 @@ class Product(models.Model):
 	available = models.BooleanField(default=True)
 	created = models.DateTimeField(auto_now_add=True)
 	updated = models.DateTimeField(auto_now=True)
+	video_file = models.FileField(blank = True, null = True)
 
 	class Meta:
 		ordering = ('name',)
@@ -44,7 +45,7 @@ class Lesson(models.Model):
     slug = models.SlugField()
     title = models.CharField(max_length=120)
     course = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    video_url = models.CharField(max_length=200)
+
 
     def __str__(self):
         return self.title
