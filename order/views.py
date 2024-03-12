@@ -73,7 +73,7 @@ class OrderDetailView(LoginRequiredMixin, View):
 	form_class = CouponApplyForm
 
 	def get(self, request, order_id):
-		order = get_object_or_404(Order, id=order_id)
+		order = get_object_or_404(OrderItem, id=order_id)
 		return render(request, 'orders/order.html', {'order':order, 'form':self.form_class})
 
 class OrderDetailApiView(LoginRequiredMixin, View):
@@ -144,13 +144,13 @@ CallbackURL = 'http://127.0.0.1:8000/orders/verify/'
 
 class OrderPayView(LoginRequiredMixin, View):
 	def get(self, request, order_id):
-		order = Order.objects.get(id=order_id)
+		order = OrderItem.objects.get(id=order_id)
 		request.session['order_pay'] = {
 			'order_id': order.id,
 		}
 		req_data = {
 			"merchant_id": MERCHANT,
-			"amount": order.get_total_price(),
+			"amount": order.get_cost(),
 			"callback_url": CallbackURL,
 			"description": description,
 			"metadata": {"mobile": request.user.phone_number, "email": request.user.email}
@@ -159,7 +159,8 @@ class OrderPayView(LoginRequiredMixin, View):
 					  "content-type": "application/json'"}
 		req = requests.post(url=ZP_API_REQUEST, data=json.dumps(
 			req_data), headers=req_header)
-		authority = req.json()['data']['authority']
+		authority = req.json()
+		# authority = req.json()['data']['authority']
 		if len(req.json()['errors']) == 0:
 			return redirect(ZP_API_STARTPAY.format(authority=authority))
 		else:
@@ -168,13 +169,13 @@ class OrderPayView(LoginRequiredMixin, View):
 			return HttpResponse(f"Error code: {e_code}, Error Message: {e_message}")
 class OrderPayApiView(APIView):
 	def get(self, request, order_id):
-		order = Order.objects.get(id=order_id)
+		order = OrderItem.objects.get(id=order_id)
 		request.session['order_pay'] = {
 			'order_id': order.id,
 		}
 		req_data = {
 			"merchant_id": MERCHANT,
-			"amount": order.get_total_price(),
+			"amount": order.get_cost(),
 			"callback_url": CallbackURL,
 			"description": description,
 			"metadata": {"mobile": request.user.phone_number, "email": request.user.email}
@@ -195,7 +196,7 @@ class OrderPayApiView(APIView):
 class OrderVerifyView(LoginRequiredMixin, View):
 	def get(self, request):
 		order_id = request.session['order_pay']['order_id']
-		order = Order.objects.get(id=int(order_id))
+		order = OrderItem.objects.get(id=int(order_id))
 		t_status = request.GET.get('Status')
 		t_authority = request.GET['Authority']
 		if request.GET.get('Status') == 'OK':
@@ -203,7 +204,7 @@ class OrderVerifyView(LoginRequiredMixin, View):
 						  "content-type": "application/json'"}
 			req_data = {
 				"merchant_id": MERCHANT,
-				"amount": order.get_total_price(),
+				"amount": order.get_cost(),
 				"authority": t_authority
 			}
 			req = requests.post(url=ZP_API_VERIFY, data=json.dumps(req_data), headers=req_header)
